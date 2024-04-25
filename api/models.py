@@ -2,6 +2,21 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
+class Genre(models.Model):
+    name = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+
+class CrewMember(models.Model):
+    name = models.CharField(max_length=255)
+    image_url = models.URLField(null=True)
+    gender = models.CharField(max_length=10)
+    type = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+
 class Movie(models.Model):
     slug = models.SlugField(unique=True)
     image_url = models.URLField()
@@ -11,24 +26,16 @@ class Movie(models.Model):
     duration = models.IntegerField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    genres = models.ManyToManyField(Genre, related_name='movies')
+    crew = models.ManyToManyField(CrewMember, through='MovieCrew', related_name='movies')
 
 
-class Genre(models.Model):
+class MovieCrew(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-
-class CrewMember(models.Model):
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    image_url = models.URLField()
-    birth_date = models.DateField()
-    gender = models.CharField(max_length=10)
-    type = models.CharField(max_length=100)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    crew_member = models.ForeignKey(CrewMember, on_delete=models.CASCADE)
+    order = models.IntegerField(null=True)
+    character = models.CharField(max_length=255, null=True)
+    role = models.CharField(max_length=100, null=True)
 
 
 class LibraryEntry(models.Model):

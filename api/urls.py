@@ -16,11 +16,30 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import MovieListCreateAPIView, MovieRetrieveUpdateDestroyAPIView, hello_world
+from .views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
     path('', hello_world),
-    path('movies/', MovieListCreateAPIView.as_view(), name='movie-list-create'),
-    path('movies/<int:pk>/', MovieRetrieveUpdateDestroyAPIView.as_view(), name='movie-detail'),
+
+    path('genre/', GenreListCreate.as_view(), name='genre-list'),
+    path('genre/<int:pk>/', GenreRetrieveUpdateDestroy.as_view(), name='genre-detail'),
+
+    path('crew/', CrewMemberListCreate.as_view(), name='crew-member-list'),
+    path('crew/<int:pk>/', CrewMemberRetrieveUpdateDestroy.as_view(), name='crew-member-detail'),
+
+    path('movie/', MovieListCreate.as_view(), name='movie-list'),
+    path('movie/<int:pk>/', MovieRetrieveUpdateDestroy.as_view(), name='movie-detail'),
+
+    path('movie-crew/', MovieCrewListCreate.as_view(), name='movie-crew-list'),
+    path('movie-crew/<int:pk>/', MovieCrewRetrieveUpdateDestroy.as_view(), name='movie-crew-detail'),
+
+    path('library/', LibraryEntryListCreate.as_view(), name='library-entry-list'),
+    path('library/<int:pk>/', LibraryEntryRetrieveUpdateDestroy.as_view(), name='library-entry-detail'),
+
+    path('review/', ReviewListCreate.as_view(), name='review-list'),
+    path('review/<int:pk>/', ReviewRetrieveUpdateDestroy.as_view(), name='review-detail'),
+
+    path('populate/', populate, name='populate'),
 ]
