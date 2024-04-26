@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from .views import *
 
 urlpatterns = [
@@ -23,23 +23,33 @@ urlpatterns = [
 
     path('', hello_world),
 
-    path('genre/', GenreListCreate.as_view(), name='genre-list'),
-    path('genre/<int:pk>/', GenreRetrieveUpdateDestroy.as_view(), name='genre-detail'),
+    path('api/genre/', GenreListCreate.as_view(), name='genre-list'),
+    path('api/genre/<int:pk>/', GenreRetrieveUpdateDestroy.as_view(), name='genre-detail'),
 
-    path('crew/', CrewMemberListCreate.as_view(), name='crew-member-list'),
-    path('crew/<int:pk>/', CrewMemberRetrieveUpdateDestroy.as_view(), name='crew-member-detail'),
+    path('api/crew/', CrewMemberListCreate.as_view(), name='crew-member-list'),
+    path('api/crew/<int:pk>/', CrewMemberRetrieveUpdateDestroy.as_view(), name='crew-member-detail'),
 
-    path('movie/', MovieListCreate.as_view(), name='movie-list'),
-    path('movie/<int:pk>/', MovieRetrieveUpdateDestroy.as_view(), name='movie-detail'),
+    path('api/movie/', MovieListCreate.as_view(), name='movie-list'),
+    path('api/movie/<slug:slug>/', MovieRetrieveUpdateDestroy.as_view(), name='movie-detail'),
 
-    path('movie-crew/', MovieCrewListCreate.as_view(), name='movie-crew-list'),
-    path('movie-crew/<int:pk>/', MovieCrewRetrieveUpdateDestroy.as_view(), name='movie-crew-detail'),
+    path('api/movie-crew/', MovieCrewListCreate.as_view(), name='movie-crew-list'),
+    path('api/movie-crew/<int:pk>/', MovieCrewRetrieveUpdateDestroy.as_view(), name='movie-crew-detail'),
 
-    path('library/', LibraryEntryListCreate.as_view(), name='library-entry-list'),
-    path('library/<int:pk>/', LibraryEntryRetrieveUpdateDestroy.as_view(), name='library-entry-detail'),
+    path('api/library/', LibraryEntryListCreate.as_view(), name='library-entry-list'),
+    path('api/library/add/', AddMovieToLibrary.as_view(), name='add-movie-to-library'),
+    path('api/library/entry/', LibraryEntryDetail.as_view(), name='library-entry-detail'),
+    path('api/library/<int:pk>/update/', UpdateLibraryEntryStatus.as_view(), name='update-library-entry-status'),
+    path('api/library/<int:pk>/delete/', LibraryEntryDestroy.as_view(), name='delete-library-entry'),
 
-    path('review/', ReviewListCreate.as_view(), name='review-list'),
-    path('review/<int:pk>/', ReviewRetrieveUpdateDestroy.as_view(), name='review-detail'),
+    path('api/review/', ReviewListCreate.as_view(), name='review-list'),
+    path('api/review/<int:pk>/', ReviewRetrieveUpdateDestroy.as_view(), name='review-detail'),
 
-    path('populate/', populate, name='populate'),
+    path('api/movie/<slug:slug>/reviews/', MovieReviewList.as_view(), name='movie-review-list'),
+    path('api/movie/<int:pk>/reviews/submit/', CreateReview.as_view(), name='create-review'),
+
+    path('api/recommendations/', MovieRecommendationAPIView.as_view(), name='movie-recommendations'),
+
+    path('api/populate/', populate, name='populate'),
+
+    path('api/auth/', include('authentication.urls')),
 ]
